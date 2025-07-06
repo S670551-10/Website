@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluent English Hub | Modern Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS --- */
+        :root {
+            --primary-glow: rgba(124, 58, 237, 0.4);
+            --secondary-glow: rgba(219, 39, 119, 0.4);
+            --primary-color: #7c2d12;
+            --secondary-color: #9f1239;
+            --bg-color: #0f172a; /* Slate 900 */
+            --card-color: #1e293b; /* Slate 800 */
+            --text-color: #cbd5e1; /* Slate 300 */
+            --heading-color: #f8fafc; /* Slate 50 */
+            --border-color: #334155; /* Slate 700 */
+            --accent-color: #f59e0b; /* Amber 500 */
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+        
+        .logo-container svg {
+            width: 80px;
+            height: 80px;
+        }
+
+        .main-heading {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            background: linear-gradient(90deg, #e0e7ff, #fbcfe8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .sub-heading {
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+            color: var(--text-color);
+        }
+
+        .topic-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .topic-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: var(--card-color);
+            color: var(--heading-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem; /* 12px */
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        .topic-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1), 0 0 0 1px var(--accent-color);
+        }
+
+        .topic-btn svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent-color);
+        }
+
+        .telegram-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            background-color: var(--card-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .telegram-text {
+            color: var(--heading-color);
+            font-weight: 500;
+        }
+        
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #2AABEE;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .telegram-btn:hover {
+            background-color: #1e9de0;
+            transform: scale(1.05);
+        }
+
+        .telegram-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: var(--card-color);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-container svg {
+            color: var(--accent-color);
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        .modal-container h2 {
+            color: var(--heading-color);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-container p {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-close-btn {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background-color: #fbbd23; /* Amber 400 */
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .main-heading { font-size: 2.25rem; }
+            .topic-buttons { flex-direction: column; align-items: stretch; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="logo-container">
+            <!-- SVG Logo: Abstract book/speech bubble -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 19V6.2C4 5.0799 4 4.51984 4.21799 4.09202C4.40973 3.71569 4.71569 3.40973 5.09202 3.21799C5.51984 3 6.0799 3 7.2 3H16.8C17.9201 3 18.4802 3 18.908 3.21799C19.2843 3.40973 19.5903 3.71569 19.782 4.09202C20 4.51984 20 5.0799 20 6.2V17H6C4.89543 17 4 17.8954 4 19ZM4 19C4 20.1046 4.89543 21 6 21H20V19H4Z" fill="#f59e0b"></path> </g></svg>
+        </div>
+
+        <h1 class="main-heading">Unlock Fluent English</h1>
+        <p class="sub-heading">Go beyond basic grammar. Master real-world English with lessons designed for practical, confident communication.</p>
+
+        <div class="topic-buttons">
+            <button class="topic-btn" data-modal-trigger>
+                <!-- SVG Icon for Thinking/AI -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5M19.5 8.25h-1.5m-15 3.75h1.5m15 0h1.5m-15 3.75h1.5m15 0h1.5M12 6.75h.008v.008H12V6.75zm-.375 0a.375.375 0 11.75 0 .375.375 0 01-.75 0zM12 12h.008v.008H12V12zm-.375 0a.375.375 0 11.75 0 .375.375 0 01-.75 0zm.375 3.75h.008v.008H12v-.008zm-.375 0a.375.375 0 11.75 0 .375.375 0 01-.75 0z" />
+                </svg>
+                <span>Think Like a Native</span>
+            </button>
+            <button class="topic-btn" data-modal-trigger>
+                <!-- SVG Icon for conversation -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
+                </svg>
+                <span>Confident Conversations</span>
+            </button>
+        </div>
+
+        <div class="telegram-section">
+            <p class="telegram-text">Get daily tips & updates directly on your phone.</p>
+            <a href="https://t.me/learnenglish144" target="_blank" class="telegram-btn">
+                <!-- SVG Icon for Telegram -->
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="white" fill-opacity="0.01"></path>
+                    <path d="M17 7L5 12L8.5 13.5L13.5 10.5L10.5 15L17 7Z" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M17 7L10.5 15L8.5 13.5L5 12L17 7Z" fill="#2AABEE"></path>
+                    <path d="M17 7L10.5 15L12 17L17 7Z" fill="white"></path>
+                </svg>
+                <span>Follow on Telegram</span>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Modal Popup Structure -->
+    <div class="modal-overlay" id="coming-soon-modal">
+        <div class="modal-container">
+            <!-- SVG Icon for Rocket -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56v4.82a6 6 0 01-1.242 3.63m0 0a6 6 0 01-3.638 1.242m-2.433-4.82v4.82a6 6 0 01-7.38-5.84h4.82m2.56-5.84v-4.82a6 6 0 015.84 7.38h-4.82m-2.56 2.56h4.82a6 6 0 01-7.38 5.84v-4.82m5.84-2.56h-4.82a6 6 0 01-1.242-3.63m0 0L10.5 11.25 12 12.75l1.5-1.5" />
+            </svg>
+            <h2>Launching Soon!</h2>
+            <p>This new lesson is currently under construction. Follow us on Telegram for the official launch announcement!</p>
+            <button class="modal-close-btn" id="modal-close">Got it</button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- JavaScript ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalOverlay = document.getElementById('coming-soon-modal');
+            const modalTriggers = document.querySelectorAll('[data-modal-trigger]');
+            const modalCloseBtn = document.getElementById('modal-close');
+
+            const openModal = () => {
+                modalOverlay.classList.add('active');
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.remove('active');
+            };
+
+            // Open modal when any trigger button is clicked
+            modalTriggers.forEach(trigger => {
+                trigger.addEventListener('click', openModal);
+            });
+
+            // Close modal with the close button
+            modalCloseBtn.addEventListener('click', closeModal);
+
+            // Close modal when clicking on the overlay
+            modalOverlay.addEventListener('click', (event) => {
+                // We check if the click is on the overlay itself, not its children
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // Close modal with the 'Escape' key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
